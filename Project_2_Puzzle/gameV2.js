@@ -1,4 +1,4 @@
-var gameport = document.getElementById("gameV1");
+var gameport = document.getElementById("gameV2");
 
 var renderer = PIXI.autoDetectRenderer({width: 320,
                                         height: 320,
@@ -7,96 +7,66 @@ gameport.appendChild(renderer.view);
 
 var stage = new PIXI.Container();
 
-var bkgTexture = PIXI.Texture.from("Field_Sprite_01.png");
+//Load up the start screen
+var startScreen = PIXI.Texture.from("GameV2StartScreen.png");
 
-var bkgSprite = new PIXI.Sprite(bkgTexture);
+var startSprite = new PIXI.Sprite(startScreen);
 
-bkgSprite.anchor.x = 0.5;
-bkgSprite.anchor.y = 0.5;
+startSprite.anchor.x = 0.5;
+startSprite.anchor.y = 0.5;
 
-bkgSprite.position.x = 160;
-bkgSprite.position.y = 160;
+startSprite.position.x = 160;
+startSprite.position.y = 160;
 
-stage.addChild(bkgSprite);
+//set the screen to start the game on click
+startSprite.interactive = true;
+startSprite.on('mousedown', startGame);
 
-var rabbitTextureDefault = PIXI.Texture.from("Dagger_Rabbit_Sprite01.png");
-var rabbitTextureUp = PIXI.Texture.from("Dagger_Rabbit_Sprite01_Up.png");
-var rabbitTextureRight = PIXI.Texture.from("Dagger_Rabbit_Sprite01_Right.png");
-var rabbitTextureLeft = PIXI.Texture.from("Dagger_Rabbit_Sprite01.png");
-var rabbitTextureDown = PIXI.Texture.from("Dagger_Rabbit_Sprite01_Down.png");
+stage.addChild(startSprite);
 
-var rabbitSprite = new PIXI.Sprite(rabbitTextureDefault);
+//begin animation
+animate();
 
-rabbitSprite.anchor.x = 0.5;
-rabbitSprite.anchor.y = 0.5;
-
-rabbitSprite.position.x = 160;
-rabbitSprite.position.y = 160;
-
-stage.addChild(rabbitSprite);
-
-renderer.render(stage);
-
-document.addEventListener('keydown', (input) =>
+function startGame()
 {
-	const keyName = input.key;
+	//remove all current children
+	//load in the "how to play" screen
 	
-	if(isMovementKey(keyName))
-	{
-		moveSprite(keyName, rabbitSprite);
-	}
-}, false);
-
-function isMovementKey(keyName)
-{
-	if(keyName == 'd'
-	    || keyName == 'a'
-        || keyName == 'w'
-		|| keyName == 's')
-		{
-			return true;
-		}
-	return false;
+	//set the "how to play" screen to go to the level menu on click
 }
 
-function moveSprite(keyName, sprite)
+function loadMenu()
 {
+	//remove all current children
+	//load in the menus background
 	
-	if(keyName == 'd')
-	{
-		rabbitSprite.texture = rabbitTextureRight;
-		if(sprite.position.x <= 288)
-		{
-			sprite.position.x += 16;
-		}
-	}
+	//load in the sprites for the levels
 	
-		if(keyName == 'a')
-	{
-		rabbitSprite.texture = rabbitTextureLeft;
-		if(sprite.position.x >= 32)
-		{
-			sprite.position.x -= 16;
-		}
-	}
-	
-		if(keyName == 'w')
-	{
-		rabbitSprite.texture = rabbitTextureUp;
-		if(sprite.position.y >= 32)
-		{
-			sprite.position.y -= 16;
-		}
-	}
-	
-		if(keyName == 's')
-	{
-		rabbitSprite.texture = rabbitTextureDown;
-		if(sprite.position.y <= 288)
-		{
-			sprite.position.y += 16;
-		}
-	}
-	
+	//set the level sprites to load their corresponding level on click
+}
+
+//this function loads up a game level matching the ID code it was given
+function loadLevel(levelID)
+{
+	//check the ID code
+		//load the level based on that ID code
+		//create a keboard listener for WASD keys for character movement
+		//the listen will also listen for the O key which will open an options menu
+			//Option menu conatian the following:
+				//A button for turning music off
+				//A reset the level button
+				//A go back to menu button
+			//levels have the following:
+				//A background sprite
+				//Several sprites for the ice blocks
+					//Ice blocks are removed once the character leaves its space
+				//A main character sprite
+					//can only onto spaces where an Ice Block is 
+			//Levels end when the alloted moves for the level are used up resulting in a winning screen
+}
+
+function animate()
+{
+	requestAnimationFrame(animate);
 	renderer.render(stage);
 }
