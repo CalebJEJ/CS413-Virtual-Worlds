@@ -37,6 +37,12 @@ var levelZeroSprite;
 
 function startGame()
 {
+	//load music
+	let backgroundSong = new PIXI.sound.Sound.from('resources/song01.mp3');
+	//play music
+	backgroundSong.loop = true;
+	backgroundSong.play();
+	
 	//remove all children from the stage
 	stage.removeChildren();
 	//load in the "how to play" screen sprite sheet
@@ -141,6 +147,26 @@ function loadMenu()
 
 	stage.addChild(menuTextSprite);
 	
+	//load in the options menu sprite
+	var options = PIXI.Texture.from("resources/Options_Sprite.png");
+
+	optionsSprite = new PIXI.Sprite(options);
+
+	optionsSprite.anchor.x = 1;
+	optionsSprite.anchor.y = 0;
+
+	optionsSprite.position.x = 640;
+	optionsSprite.position.y = 480;
+	
+	createjs.Tween.get(optionsSprite.position).to({x: 640, y: 0}, 2500, createjs.Ease.circOut);
+
+	//set the level icon to go to the level on click
+	optionsSprite.interactive = true;
+	optionsSprite.on('mousedown', loadOptions);
+
+	stage.addChild(optionsSprite);
+	
+	
 	//load in the sprites for the levels
 
     //Level Zero sprite
@@ -164,7 +190,7 @@ function loadMenu()
 	
 	
 	//Level One sprite
-	var levelOne = PIXI.Texture.from("resources/Level1Menu.png");
+	var levelOne = PIXI.Texture.from("resources/Level01Menu.png");
 
 	levelOneSprite = new PIXI.Sprite(levelOne);
 
@@ -182,6 +208,30 @@ function loadMenu()
 
 	stage.addChild(levelOneSprite);
 	
+}
+
+//loads the options menu on top of whatever is on screen
+function loadOptions()
+{
+	//load in a box to hold the options
+	
+	var optionsMenuBack = PIXI.Texture.from("resources/Options_Menu_Back.png");
+
+	optionsMenuBackSprite = new PIXI.Sprite(optionsMenuBack);
+
+	optionsMenuBackSprite.anchor.x = 0.5;
+	optionsMenuBackSprite.anchor.y = 0.5;
+
+	optionsMenuBackSprite.position.x = 320;
+	optionsMenuBackSprite.position.y = 480;
+	
+	createjs.Tween.get(optionsMenuBackSprite.position).to({x: 160, y: 500}, 2500, createjs.Ease.circOut);
+
+	stage.addChild(optionsMenuBackSprite);
+	
+	//option 1 = restart the game
+	
+	//option 2 = turn music on or off
 }
 
 //this function loads up level 0
