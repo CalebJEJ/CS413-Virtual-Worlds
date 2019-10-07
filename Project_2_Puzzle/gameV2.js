@@ -37,6 +37,8 @@ var optionsMenuCloseSprite;
 var optionsMenuBackSprite;
 var optionsMenuMusicSprite;
 var optionsMenuCloseSprite;
+var creditsCloseSprite;
+var creditsIconSprite;
 
 //global music
 var backgroundSong;
@@ -215,6 +217,23 @@ function loadMenu()
 
 	stage.addChild(levelOneSprite);
 	
+	//credits sprite
+		
+	var creditsIcon = PIXI.Texture.from("resources/Credit_Icon_Sprite.png");
+
+	creditsIconSprite = new PIXI.Sprite(creditsIcon);
+
+	creditsIconSprite.position.x = 580;
+	creditsIconSprite.position.y = 1000;
+	
+	createjs.Tween.get(creditsIconSprite.position).to({x: 580, y: 280}, 2500, createjs.Ease.cricOut);
+	
+	//set the credit icon to show credits on click
+	creditsIconSprite.interactive = true;
+	creditsIconSprite.on('mousedown', showCredits);
+
+	stage.addChild(creditsIconSprite);
+	
 }
 
 //loads the options menu on top of whatever is on screen
@@ -240,6 +259,7 @@ function loadOptions()
 	stage.addChild(optionsMenuBackSprite);
 	
 	//option 1 = restart the game
+	//TODO
 	
 	//option 2 = turn music on or off
 	
@@ -260,6 +280,7 @@ function loadOptions()
 
 	stage.addChild(optionsMenuMusicSprite);
 	
+	//create a sprite for showing if music is on or off
 	var optionsMenuMusicOff = PIXI.Texture.from("resources/X_Cross_Sprite.png");
 
 	optionsMenuMusicOffSprite = new PIXI.Sprite(optionsMenuMusicOff);
@@ -346,6 +367,74 @@ function switchOnOffMusic()
 	}
 }
 
+//function to show credits from the main menu
+function showCredits()
+{
+	//hide the menu offscreen
+	createjs.Tween.get(levelZeroSprite.position).to({x: -1000, y: 160}, 2000, createjs.Ease.circOut);
+	createjs.Tween.get(optionsSprite.position).to({x: -1000, y: 0}, 2000, createjs.Ease.circOut);
+	createjs.Tween.get(menuTextSprite.position).to({x: -1000, y: 160}, 2000, createjs.Ease.circOut);
+	createjs.Tween.get(creditsIconSprite.position).to({x: -1000, y: 320}, 2500, createjs.Ease.bounceOut);
+	
+	//load the credits text
+	
+	var creditsText = PIXI.Texture.from("resources/Credit_Text_Sprite.png");
+
+	creditsTextSprite = new PIXI.Sprite(creditsText);
+
+	creditsTextSprite.anchor.x = 0.5;
+	creditsTextSprite.anchor.y = 0.5;
+
+	creditsTextSprite.position.x = 1000;
+	creditsTextSprite.position.y = 160;
+	
+	createjs.Tween.get(creditsTextSprite.position).to({x: 320, y: 160}, 2500, createjs.Ease.bounceOut);
+
+	stage.addChild(creditsTextSprite);
+	
+	//close credits sprite
+	var creditsClose = PIXI.Texture.from("resources/X_Cross_Sprite.png");
+
+	creditsCloseSprite = new PIXI.Sprite(creditsClose);
+
+	creditsCloseSprite.anchor.x = 0.5;
+	creditsCloseSprite.anchor.y = 0.5;
+
+	creditsCloseSprite.position.x = -1000;
+	creditsCloseSprite.position.y = 30;
+	
+	createjs.Tween.get(creditsCloseSprite.position).to({x: 40, y: 30}, 2500, createjs.Ease.bounceOut);
+	
+	creditsCloseSprite.interactive = true;
+	creditsCloseSprite.on('mousedown', hideCredits);
+
+	stage.addChild(creditsCloseSprite);
+}
+
+//function to hide credits from the main menu
+function hideCredits()
+{
+	//hide and close credits
+	createjs.Tween.get(creditsCloseSprite.position).to({x: 1000, y: 30}, 2000, createjs.Ease.bounceOut);
+	createjs.Tween.get(creditsTextSprite.position).to({x: 1000, y: 30}, 2000, createjs.Ease.bounceOut);
+	
+	if(creditsCloseSprite.position.x > 900)
+	{
+		stage.removeChild(creditsCloseSprite);
+	}
+	
+	if(creditsTextSprite.position.x > 900)
+	{
+		stage.removeChild(creditsTextSprite);
+	}
+	
+	//reshow the menu offscreen
+	createjs.Tween.get(levelZeroSprite.position).to({x: 160, y: 160}, 2000, createjs.Ease.circOut);
+	createjs.Tween.get(optionsSprite.position).to({x: 640, y: 0}, 2500, createjs.Ease.circOut);
+	createjs.Tween.get(menuTextSprite.position).to({x: 320, y: 160}, 3000, createjs.Ease.circOut);
+	createjs.Tween.get(creditsIconSprite.position).to({x: 580, y: 280}, 2500, createjs.Ease.bounceOut);
+}
+
 //this function loads up level 0
 function loadLevel0()
 {
@@ -382,6 +471,7 @@ function loadLevel1()
 			//Levels end when each of the jumbled puzzle's pieces postioning matches the complete ones
 }
 
+//a function for keeping the animations going
 function animate()
 {
 	requestAnimationFrame(animate);
