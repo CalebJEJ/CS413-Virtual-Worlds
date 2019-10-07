@@ -33,12 +33,19 @@ var backgroundSprite2;
 var howToPlayTextSprite;
 var menuTextSprite;
 var levelZeroSprite;
+var optionsMenuCloseSprite;
+var optionsMenuBackSprite;
+var optionsMenuMusicSprite;
+var optionsMenuCloseSprite;
+
+//global music
+var backgroundSong;
 
 
 function startGame()
 {
 	//load music
-	let backgroundSong = new PIXI.sound.Sound.from('resources/song01.mp3');
+	backgroundSong = new PIXI.sound.Sound.from('resources/song01.mp3');
 	//play music
 	backgroundSong.loop = true;
 	backgroundSong.play();
@@ -215,7 +222,7 @@ function loadOptions()
 {
 	//load in a box to hold the options
 	
-	var optionsMenuBack = PIXI.Texture.from("resources/Options_Menu_Back.png");
+	var optionsMenuBack = PIXI.Texture.from("resources/Option_Menu_Back.png");
 
 	optionsMenuBackSprite = new PIXI.Sprite(optionsMenuBack);
 
@@ -223,15 +230,120 @@ function loadOptions()
 	optionsMenuBackSprite.anchor.y = 0.5;
 
 	optionsMenuBackSprite.position.x = 320;
-	optionsMenuBackSprite.position.y = 480;
+	optionsMenuBackSprite.position.y = 0;
 	
-	createjs.Tween.get(optionsMenuBackSprite.position).to({x: 160, y: 500}, 2500, createjs.Ease.circOut);
+	optionsMenuBackSprite.scale.x = 1.8;
+	optionsMenuBackSprite.scale.y = 1.8;
+	
+	createjs.Tween.get(optionsMenuBackSprite.position).to({x: 320, y: 160}, 2000, createjs.Ease.circOut);
 
 	stage.addChild(optionsMenuBackSprite);
 	
 	//option 1 = restart the game
 	
 	//option 2 = turn music on or off
+	
+	var optionsMenuMusic = PIXI.Texture.from("resources/Sound_Sprite.png");
+
+	optionsMenuMusicSprite = new PIXI.Sprite(optionsMenuMusic);
+
+	optionsMenuMusicSprite.anchor.x = 0.5;
+	optionsMenuMusicSprite.anchor.y = 0.5;
+
+	optionsMenuMusicSprite.position.x = 200;
+	optionsMenuMusicSprite.position.y = 0;
+	
+	createjs.Tween.get(optionsMenuMusicSprite.position).to({x: 200, y: 160}, 2500, createjs.Ease.circOut);
+	
+	optionsMenuMusicSprite.interactive = true;
+	optionsMenuMusicSprite.on('mousedown', switchOnOffMusic);
+
+	stage.addChild(optionsMenuMusicSprite);
+	
+	var optionsMenuMusicOff = PIXI.Texture.from("resources/X_Cross_Sprite.png");
+
+	optionsMenuMusicOffSprite = new PIXI.Sprite(optionsMenuMusicOff);
+
+	optionsMenuMusicOffSprite.anchor.x = 0.5;
+	optionsMenuMusicOffSprite.anchor.y = 0.5;
+
+	optionsMenuMusicOffSprite.position.x = 200;
+	optionsMenuMusicOffSprite.position.y = 0;
+	
+	createjs.Tween.get(optionsMenuMusicOffSprite.position).to({x: 200, y: 160}, 2500, createjs.Ease.circOut);
+	
+	//if music is playing set visiblity to false
+	if(backgroundSong.volume == 1)
+	{
+		optionsMenuMusicOffSprite.visible = false;
+	}
+
+	stage.addChild(optionsMenuMusicOffSprite);
+	
+	//close option menu sprite
+	var optionsMenuClose = PIXI.Texture.from("resources/X_Cross_Sprite.png");
+
+	optionsMenuCloseSprite = new PIXI.Sprite(optionsMenuClose);
+
+	optionsMenuCloseSprite.anchor.x = 0.5;
+	optionsMenuCloseSprite.anchor.y = 0.5;
+
+	optionsMenuCloseSprite.position.x = 600;
+	optionsMenuCloseSprite.position.y = 0;
+	
+	createjs.Tween.get(optionsMenuCloseSprite.position).to({x: 600, y: 30}, 2500, createjs.Ease.circOut);
+	
+	optionsMenuCloseSprite.interactive = true;
+	optionsMenuCloseSprite.on('mousedown', closeMenu);
+
+	stage.addChild(optionsMenuCloseSprite);
+}
+
+//function closes out the options menu
+function closeMenu()
+{
+	createjs.Tween.get(optionsMenuCloseSprite.position).to({x: 600, y: -1000}, 2500, createjs.Ease.circOut);
+	createjs.Tween.get(optionsMenuBackSprite.position).to({x: 320, y: -1000}, 2500, createjs.Ease.circOut);
+	createjs.Tween.get(optionsMenuMusicOffSprite.position).to({x: 320, y: -1000}, 2500, createjs.Ease.circOut);
+	createjs.Tween.get(optionsMenuMusicSprite.position).to({x: 320, y: -1000}, 2500, createjs.Ease.circOut);
+	
+	//once off screen remove them
+	if(optionsMenuCloseSprite.position.y < -900)
+	{
+		stage.removeChild(optionsMenuCloseSprite);
+	}
+	
+		
+	if(optionsMenuBackSprite.position.y < -900)
+	{
+		stage.removeChild(optionsMenuBackSprite);
+	}
+	
+	if(optionsMenuMusicOffSprite.position.y < -900)
+	{
+		stage.removeChild(optionsMenuMusicOffSprite);
+	}
+	
+		
+	if(optionsMenuMusicSprite.position.y < -900)
+	{
+		stage.removeChild(optionsMenuMusicSprite);
+	}
+}
+
+//function that stops or starts music if already stopped
+function switchOnOffMusic()
+{
+	if(backgroundSong.volume == 1)
+	{
+		backgroundSong.volume = 0;
+		optionsMenuMusicOffSprite.visible = true;
+	}
+	else
+	{
+		backgroundSong.volume = 1;
+		optionsMenuMusicOffSprite.visible = false;
+	}
 }
 
 //this function loads up level 0
