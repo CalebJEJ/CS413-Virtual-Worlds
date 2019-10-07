@@ -33,6 +33,7 @@ function startGame()
 	stage.removeChildren();
 	//load in the "how to play" screen
 	var howToScreenSprite;
+	var howToScreenSprite2;
 	PIXI.Loader.shared.add('resources/waterAssets.json').load(setup);
 	
 	function setup() {
@@ -56,15 +57,30 @@ function startGame()
 		
 		howToScreenSprite.gotoAndPlay(0);
 
-		//set the screen to start the game on click
+		//set the screens to go to the menu on click
 		howToScreenSprite.interactive = true;
 		howToScreenSprite.on('mousedown', loadMenu);
 		
 		stage.addChild(howToScreenSprite);
+		
+		//second half of the how to screen
+		
+		howToScreenSprite2 = new PIXI.AnimatedSprite(waterFrames);
+		
+		howToScreenSprite2.position.x = 480;
+		howToScreenSprite2.position.y = 160;
+		
+		howToScreenSprite2.anchor.set(0.5);
+		
+		howToScreenSprite2.animationSpeed = 0.01;
+		
+		howToScreenSprite2.gotoAndPlay(0);
+		
+		stage.addChild(howToScreenSprite2);
+		
 		animate();
 	}
-	
-	//set the "how to play" screen to go to the level menu on click
+
 	
 }
 
